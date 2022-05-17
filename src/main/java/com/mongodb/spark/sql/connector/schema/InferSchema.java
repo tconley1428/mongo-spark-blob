@@ -120,8 +120,14 @@ public final class InferSchema {
         return DataTypes.createArrayType(elementType, true);
       case SYMBOL:
       case STRING:
-      case OBJECT_ID:
         return DataTypes.StringType;
+      case OBJECT_ID:
+        return dataTypeCheckStructTypeToMapType(
+            DataTypes.createStructType(
+                new StructField[] {
+                  new StructField("$oid", DataTypes.StringType, true, Metadata.empty())
+                }),
+            readConfig);
       case BINARY:
         return DataTypes.BinaryType;
       case BOOLEAN:

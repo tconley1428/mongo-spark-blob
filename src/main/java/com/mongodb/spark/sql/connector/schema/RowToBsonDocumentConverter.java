@@ -49,9 +49,11 @@ import org.bson.BsonDocument;
 import org.bson.BsonDouble;
 import org.bson.BsonInt32;
 import org.bson.BsonInt64;
+import org.bson.BsonObjectId;
 import org.bson.BsonString;
 import org.bson.BsonValue;
 import org.bson.types.Decimal128;
+import org.bson.types.ObjectId;
 
 import com.mongodb.spark.sql.connector.exceptions.ConfigException;
 import com.mongodb.spark.sql.connector.exceptions.DataException;
@@ -165,6 +167,11 @@ public final class RowToBsonDocumentConverter implements Serializable {
         return bsonDocument;
       } else if (dataType instanceof StructType) {
         Row row = (Row) data;
+
+        if (row.schema().fields().length == 1 && row.schema().fields()[0].name().equals("$oid")) {
+          return new BsonObjectId(new ObjectId((String) row.get(0)));
+        }
+
         BsonDocument bsonDocument = new BsonDocument();
         for (StructField field : row.schema().fields()) {
           int fieldIndex = row.fieldIndex(field.name());

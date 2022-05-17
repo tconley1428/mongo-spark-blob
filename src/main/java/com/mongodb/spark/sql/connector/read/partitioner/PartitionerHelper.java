@@ -153,8 +153,7 @@ public final class PartitionerHelper {
               c.getDatabase(readConfig.getDatabaseName()).runCommand(PING_COMMAND);
               return c.getClusterDescription();
             })
-        .getServerDescriptions()
-        .stream()
+        .getServerDescriptions().stream()
         .flatMap(sd -> sd.getHosts().stream())
         .collect(Collectors.toList());
   }

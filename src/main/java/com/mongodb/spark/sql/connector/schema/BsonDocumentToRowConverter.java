@@ -192,6 +192,13 @@ public final class BsonDocumentToRowConverter implements Serializable {
       final StructType dataType,
       final BsonValue bsonValue,
       final JsonWriterSettings jsonWriterSettings) {
+
+    // Special case object ids into oid documents
+    if (bsonValue.isObjectId()) {
+      return new GenericRowWithSchema(
+          new Object[] {convertToString(bsonValue, jsonWriterSettings)}, dataType);
+    }
+
     if (!bsonValue.isDocument()) {
       throw invalidFieldData(fieldName, dataType, bsonValue);
     }

@@ -43,7 +43,6 @@ final class ConverterHelper {
                 writer.writeString(DateTimeFormatter.ISO_DATE_TIME.format(zonedDateTime));
               })
           .decimal128Converter((value, writer) -> writer.writeString(value.toString()))
-          .objectIdConverter((value, writer) -> writer.writeString(value.toHexString()))
           .symbolConverter((value, writer) -> writer.writeString(value))
           .build();
 

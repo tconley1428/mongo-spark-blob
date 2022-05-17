@@ -181,13 +181,8 @@ public final class ShardedPartitioner implements Partitioner {
   private Map<String, List<String>> createShardMap(final ReadConfig readConfig) {
     return readConfig.withClient(
         client ->
-            client
-                .getDatabase(CONFIG_DATABASE)
-                .getCollection(CONFIG_SHARDS, BsonDocument.class)
-                .find()
-                .projection(SHARDS_PROJECTIONS)
-                .into(new ArrayList<>())
-                .stream()
+            client.getDatabase(CONFIG_DATABASE).getCollection(CONFIG_SHARDS, BsonDocument.class)
+                .find().projection(SHARDS_PROJECTIONS).into(new ArrayList<>()).stream()
                 .collect(
                     Collectors.toMap(
                         s -> s.getString(ID_FIELD).getValue(),
